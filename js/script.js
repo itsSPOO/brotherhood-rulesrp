@@ -202,10 +202,12 @@ const CONTENT = {
         title: "Safe Zones",
         hint: "No provoking/criminal actions in these areas.",
         zones: [
-          { name: "Hospital", note: "No criminal/provoking actions → 48H Ban" },
-          { name: "Hotel", note: "No criminal/provoking actions → 48H Ban" },
-          { name: "Recycle", note: "No criminal/provoking actions → 48H Ban" },
-          { name: "Labs", note: "No criminal/provoking actions → 48H Ban" }
+          { name: "Hospital", note: "No criminal/provoking actions → 48H Ban", img: "./assets/hospital_sz.png" },
+          { name: "Hotel", note: "No criminal/provoking actions → 48H Ban", img: "./assets/hotel_sz.png" },
+          { name: "Fish", note: "No criminal/provoking actions → 48H Ban", img: "./assets/fish_sz.png" },
+          { name: "Recycle", note: "No criminal/provoking actions → 48H Ban", img: "./assets/Recycle_sz.jpg" },
+          { name: "Meth Lab", note: "No criminal/provoking actions → 48H Ban", img: "./assets/lab1_sz.jpg" },
+          { name: "Weed Lab", note: "No criminal/provoking actions → 48H Ban", img: "./assets/lab2_sz.jpg" }
         ]
       },
       death: {
@@ -348,10 +350,12 @@ const CONTENT = {
         title: "المناطق الآمنة",
         hint: "ممنوع أي تصرف إجرامي/استفزازي.",
         zones: [
-          { name: "Hospital", note: "ممنوع أفعال إجرامية/استفزاز → 48H Ban" },
-          { name: "Hotel", note: "ممنوع أفعال إجرامية/استفزاز → 48H Ban" },
-          { name: "Recycle", note: "ممنوع أفعال إجرامية/استفزاز → 48H Ban" },
-          { name: "Labs", note: "ممنوع أفعال إجرامية/استفزاز → 48H Ban" }
+          { name: "Hospital", note: "ممنوع أفعال إجرامية/استفزاز → 48H Ban", img: "./assets/hospital_sz.png" },
+          { name: "Hotel", note: "ممنوع أفعال إجرامية/استفزاز → 48H Ban", img: "./assets/hotel_sz.png" },
+          { name: "منطقة الصيد", note: "ممنوع أفعال إجرامية/استفزاز → 48H Ban", img: "./assets/fish_sz.png" },
+          { name: "Recycle", note: "ممنوع أفعال إجرامية/استفزاز → 48H Ban", img: "./assets/Recycle_sz.jpg" },
+          { name: "مختبر الميث", note: "ممنوع أفعال إجرامية/استفزاز → 48H Ban", img: "./assets/lab1_sz.jpg" },
+          { name: "مختبر الحشيش", note: "ممنوع أفعال إجرامية/استفزاز → 48H Ban", img: "./assets/lab2_sz.jpg" }
         ]
       },
       death: {
@@ -414,17 +418,23 @@ function renderShell(lang) {
   const isHome = !$("appRoot");
   if (isHome) {
     if (lang === "ar") {
-      safeSetText("brandSubtitle", "الرئيسية");
+      safeSetText("brandSubtitle", "بوابة القوانين");
       safeSetText("pageTitle", "Brotherhood RP — بوابة القوانين");
-      safeSetText("pageSubtitle", "قوانين واضحة. دخول سريع.");
-      safeSetText("pageDesc", "اضغط الزر للدخول إلى الأقسام ثم اقرأ القوانين.");
+      safeSetText("pageSubtitle", "حيث يبدأ الرول بلاي الجاد.");
+      safeSetText(
+        "pageDesc",
+        "اعثر على كل ما تحتاج معرفته قبل دخول المدينة. قوانيننا مصممة للحفاظ على تجربة عادلة، واقعية، وممتعة للجميع — سواء كنت لاعبًا جديدًا أو من سكان المدينة القدامى. تصفّح الأقسام عبر الزر بالأسفل وخذ لحظة لفهم المعايير المتوقعة داخل السيرفر. احترام القوانين يحمي تقدمك وسمعتك والمجتمع. مخالفة القوانين قد تؤدي إلى تحذيرات، إيقافات مؤقتة، أو باند دائم."
+      );
       const btn = $("homeBtn");
       if (btn) btn.textContent = "الدخول إلى الأقسام";
     } else {
       safeSetText("brandSubtitle", "Rules Portal");
       safeSetText("pageTitle", "Brotherhood RP — Rules Portal");
-      safeSetText("pageSubtitle", "Clear rules. Fast access.");
-      safeSetText("pageDesc", "Use the button below to open categories and read the rules.");
+      safeSetText("pageSubtitle", "Where serious roleplay begins.");
+      safeSetText(
+        "pageDesc",
+        "Find everything you need to know before stepping into the city. Our rules are designed to keep the experience fair, immersive, and enjoyable for everyone — whether you’re a new arrival or a long-time citizen. Browse the categories using the button below and take a moment to understand the standards expected on the server. Respecting the rules protects your progress, your reputation, and the community.\n\nFailure to follow them can result in warnings, temporary suspensions, or permanent bans."
+      );
       const btn = $("homeBtn");
       if (btn) btn.textContent = "Open Categories";
     }
@@ -720,6 +730,15 @@ function renderZones(zones) {
   for (const z of zones) {
     const el = document.createElement("div");
     el.className = "safeZone";
+
+    if (z.img) {
+      const img = document.createElement("img");
+      img.className = "safeZone__img";
+      img.src = z.img;
+      img.alt = z.name;
+      img.loading = "lazy";
+      el.appendChild(img);
+    }
 
     const name = document.createElement("div");
     name.className = "safeZone__name";
