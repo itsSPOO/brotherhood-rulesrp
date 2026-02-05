@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Brotherhood RP — Rules</title>
+    <meta name="description" content="Brotherhood RP official rules." />
+    <link rel="icon" type="image/png" href="./images/icon.png" />
+    <link rel="apple-touch-icon" href="./images/icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+  <body class="is-rules">
+    <header class="topbar">
+      <div class="container topbar__inner">
+        <div class="brand" aria-label="Brotherhood RP">
+          <div class="brand__mark" aria-hidden="true"></div>
+          <div class="brand__text">
+            <div class="brand__title">Brotherhood RP</div>
+            <div class="brand__subtitle" id="brandSubtitle">Official Rules</div>
+          </div>
+        </div>
+
+        <div class="topbar__actions">
+          <button class="tocToggle" id="tocToggle" type="button">Categories</button>
+          <div class="lang">
+            <button class="lang__btn" id="langEn" type="button" aria-pressed="true">EN</button>
+            <button class="lang__btn" id="langAr" type="button" aria-pressed="false">AR</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="tocOverlay" id="tocOverlay" aria-hidden="true">
+      <div class="tocOverlay__panel" role="dialog" aria-modal="true" aria-label="Categories">
+        <div class="tocOverlay__head">
+          <div class="tocOverlay__title" id="tocOverlayTitle">Categories</div>
+          <button class="tocOverlay__close" id="tocClose" type="button">Close</button>
+        </div>
+        <div class="tocOverlay__body">
+          <div class="toc__grid toc__grid--mobile" id="tocGridMobile"></div>
+        </div>
+      </div>
+    </div>
+
+    <main>
+      <section class="page">
+        <div class="container">
+          <div class="rulesApp" id="appRoot" data-view="list">
+            <div class="rulesApp__panes">
+              <div class="pane pane--list">
+                <div class="pane__head">
+                  <h2 class="pane__title" id="categoriesTitle">Categories</h2>
+                  <p class="pane__subtitle" id="categoriesSubtitle">Choose a category to view its rules.</p>
+                </div>
+
+                <div class="catGrid" id="categoriesGrid"></div>
+              </div>
+
+              <div class="pane pane--detail" aria-live="polite">
+                <div class="detailHead">
+                  <button class="backBtn" id="backBtn" type="button">Back</button>
+                  <div class="detailHead__text">
+                    <div class="detailTitle" id="detailTitle">Category</div>
+                    <div class="detailHint" id="detailHint"></div>
+                  </div>
+                </div>
+
+                <div class="detailBody" id="detailBody"></div>
+
+                <div class="detailNav">
+                  <button class="nextBtn" id="nextCatBtn" type="button">Next</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="./js/script.js"></script>
+  </body>
+</html>
