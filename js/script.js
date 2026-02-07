@@ -180,7 +180,8 @@ const CONTENT = {
         table: {
           headers: ["Heist", "Min", "Max", "Vehicles", "Hostages", "Days"],
           rows: [
-            ["Fleeca Bank", "2", "4", "1", "1", "Tue–Fri"],
+            ["Store Robbery", "2", "3", "1", "0", "All Days"],
+            ["Fleeca Bank", "3", "4", "1", "1", "Tue–Fri"],
             ["Jewelry Store", "3", "4", "1", "1", "Friday"],
             ["Paleto Bank", "4", "5", "2", "2", "Saturday"],
             ["Pacific Bank", "4", "5", "2", "2", "Sunday"]
@@ -328,7 +329,9 @@ const CONTENT = {
         table: {
           headers: ["الهست", "الحد الأدنى", "الحد الأقصى", "المركبات", "الرهائن", "الأيام"],
           rows: [
-            ["Fleeca Bank", "2", "4", "1", "1", "الثلاثاء–الجمعة"],
+            ["Store Robbery", "2", "3", "1", "0", "كل الايام"],
+
+            ["Fleeca Bank", "3", "4", "1", "1", "الثلاثاء–الجمعة"],
             ["Jewelry Store", "3", "4", "1", "1", "الجمعة"],
             ["Paleto Bank", "4", "5", "2", "2", "السبت"],
             ["Pacific Bank", "4", "5", "2", "2", "الأحد"]
