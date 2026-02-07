@@ -291,7 +291,7 @@ function renderCategories(lang) {
 
     const arrow = document.createElement("div");
     arrow.className = "catCard__arrow";
-    arrow.textContent = document.documentElement.dir === "rtl" ? "←" : "→";
+    arrow.textContent = "•";
 
     btn.appendChild(arrow);
     btn.appendChild(title);
@@ -661,6 +661,7 @@ function init() {
       _currentCategoryKey = valid;
       setView("detail");
       renderDetail(_currentLang);
+      renderCategories(_currentLang);
     }
   });
 
