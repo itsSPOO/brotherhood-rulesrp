@@ -168,6 +168,10 @@ function openCategory(key, pushHash) {
   setView("detail");
   renderDetail(_currentLang);
 
+  if ($("appRoot")) {
+    renderCategories(_currentLang);
+  }
+
   if (pushHash) {
     window.location.hash = `#${slugify(key)}`;
   }
@@ -291,7 +295,7 @@ function renderCategories(lang) {
 
     const arrow = document.createElement("div");
     arrow.className = "catCard__arrow";
-    arrow.textContent = "•";
+    arrow.textContent = document.documentElement.dir === "rtl" ? "←" : "→";
 
     btn.appendChild(arrow);
     btn.appendChild(title);
@@ -658,10 +662,7 @@ function init() {
     if (!t) return;
     const valid = Object.keys(t.sections).find((k) => slugify(k) === key);
     if (valid) {
-      _currentCategoryKey = valid;
-      setView("detail");
-      renderDetail(_currentLang);
-      renderCategories(_currentLang);
+      openCategory(valid, false);
     }
   });
 

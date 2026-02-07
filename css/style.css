@@ -413,7 +413,8 @@ html[dir="rtl"] .rulesApp[data-view="detail"] .rulesApp__panes{transform: transl
 
 .catCard__title{font-size:22px;font-weight:800;color:var(--text-white);margin:0}
 .catCard__desc{margin-top:10px;color:var(--text-gray);line-height:1.7}
-.catCard__arrow{position:absolute;right:16px;top:16px;color:var(--primary-light);font-weight:800}
+.catCard__arrow{position:absolute;right:16px;top:16px;color:var(--primary-light);font-weight:800;transition: transform 0.2s ease;transform: none;display:none}
+.catCard--active .catCard__arrow{display:block;transform: scale(1.15)}
 html[dir="rtl"] .catCard{text-align:right}
 html[dir="rtl"] .catCard__arrow{right:auto;left:16px}
 
