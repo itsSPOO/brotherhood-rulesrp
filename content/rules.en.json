@@ -66,7 +66,7 @@
       "generalCard": {
         "title": "General Robbery Rules",
         "penalty": "48H Ban",
-        "desc": "General Rules:\n- Follow the schedule and the required number of participants for each heist.\n- Follow staff instructions and respect hostage rules.\n- Do not exploit mechanics or game bugs for unfair advantages.\n- Any violation may result in a 48-hour ban."
+        "desc": "General Rules:\n• Follow the schedule and the required number of participants for each heist.\n• Follow staff instructions and respect hostage rules.\n• Do not exploit mechanics or game bugs for unfair advantages.\n• Any violation may result in a 48-hour ban."
       },
       "table": {
         "headers": ["Heist", "Min", "Max", "Vehicles", "Hostages", "Days"],
@@ -93,12 +93,12 @@
       "title": "Safe Zones",
       "hint": "No provoking/criminal actions in these areas.",
       "zones": [
-        { "name": "🏥 Hospital", "note": "No criminal/provoking actions → 48H Ban", "img": "./assets/hospital_sz.png" },
-        { "name": "🏨 Hotel", "note": "No criminal/provoking actions → 48H Ban", "img": "./assets/hotel_sz.png" },
-        { "name": "🎯 Fish", "note": "No criminal/provoking actions → 48H Ban", "img": "./assets/fish_sz.png" },
-        { "name": "♻️ Recycle", "note": "No criminal/provoking actions → 48H Ban", "img": "./assets/Recycle_sz.jpg" },
-        { "name": "⚗️ Meth Lab", "note": "No criminal/provoking actions → 48H Ban", "img": "./assets/lab1_sz.jpg" },
-        { "name": "🌿 Weed Lab", "note": "No criminal/provoking actions → 48H Ban", "img": "./assets/lab2_sz.jpg" }
+        { "name": "🏥 • Hospital", "note": "No criminal/provoking actions → 48H Ban", "img": "./assets/hospital_sz.png" },
+        { "name": "🏨 • Hotel", "note": "No criminal/provoking actions → 48H Ban", "img": "./assets/hotel_sz.png" },
+        { "name": "🎯 • Fish", "note": "No criminal/provoking actions → 48H Ban", "img": "./assets/fish_sz.png" },
+        { "name": "♻️ • Recycle", "note": "No criminal/provoking actions → 48H Ban", "img": "./assets/Recycle_sz.jpg" },
+        { "name": "⚗️ • Meth Lab", "note": "No criminal/provoking actions → 48H Ban", "img": "./assets/lab1_sz.jpg" },
+        { "name": "🌿 • Weed Lab", "note": "No criminal/provoking actions → 48H Ban", "img": "./assets/lab2_sz.jpg" }
       ]
     },
     "death": {

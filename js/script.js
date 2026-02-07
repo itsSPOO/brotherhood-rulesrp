@@ -519,7 +519,7 @@ function renderList(items) {
         if (_currentCategoryKey === "common") {
           desc.textContent = descText
             .split("\n")
-            .map((line) => `> ${line}`)
+            .map((line) => `• ${line}`)
             .join("\n");
         } else {
           desc.textContent = descText;
