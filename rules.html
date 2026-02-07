@@ -6,6 +6,12 @@
     <title>Brotherhood RP — Official Server Rules</title>
     <meta name="description" content="Read the official Brotherhood RP server rules by category. Learn gameplay standards, roleplay expectations, and guidelines to keep the experience fair, immersive, and enjoyable." />
 
+    <meta name="robots" content="index,follow" />
+    <link rel="canonical" href="https://rules.brotherhoodrp.site/rules.html" />
+    <link rel="alternate" hreflang="en" href="https://rules.brotherhoodrp.site/rules.html?lang=en" />
+    <link rel="alternate" hreflang="ar" href="https://rules.brotherhoodrp.site/rules.html?lang=ar" />
+    <link rel="alternate" hreflang="x-default" href="https://rules.brotherhoodrp.site/rules.html" />
+
     <meta property="og:site_name" content="Brotherhood RP" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Brotherhood RP — Official Server Rules" />
@@ -36,7 +42,7 @@
         </div>
 
         <div class="topbar__actions">
-          <button class="tocToggle" id="tocToggle" type="button">Categories</button>
+          <button class="tocToggle" id="tocToggle" type="button" aria-haspopup="dialog" aria-controls="tocOverlay" aria-expanded="false">Categories</button>
           <div class="lang">
             <button class="lang__btn" id="langEn" type="button" aria-pressed="true">EN</button>
             <button class="lang__btn" id="langAr" type="button" aria-pressed="false">AR</button>
@@ -60,6 +66,12 @@
     <main>
       <section class="page">
         <div class="container">
+          <div class="loadError" id="loadError" hidden>
+            <div class="loadError__title" id="loadErrorTitle">Couldn’t load rules</div>
+            <div class="loadError__desc" id="loadErrorDesc">Please check your connection and try again.</div>
+            <button class="loadError__btn" id="loadRetryBtn" type="button">Retry</button>
+          </div>
+
           <div class="rulesApp" id="appRoot" data-view="list">
             <div class="rulesApp__panes">
               <div class="pane pane--list">
@@ -75,7 +87,7 @@
                 <div class="detailHead">
                   <button class="backBtn" id="backBtn" type="button">Back</button>
                   <div class="detailHead__text">
-                    <div class="detailTitle" id="detailTitle">Category</div>
+                    <div class="detailTitle" id="detailTitle" tabindex="-1">Category</div>
                     <div class="detailHint" id="detailHint"></div>
                   </div>
                 </div>

@@ -5,6 +5,7 @@ let _currentCategoryKey = null;
 let _contentByLang = Object.create(null);
 let _overlayReturnFocusEl = null;
 let _overlayPanelEl = null;
+let _lastLoadFailed = false;
 
 function $(id) {
   return document.getElementById(id);
@@ -14,6 +15,32 @@ function safeSetText(id, value) {
   const el = $(id);
   if (!el) return;
   el.textContent = value;
+}
+
+function setHidden(id, hidden) {
+  const el = $(id);
+  if (!el) return;
+  el.hidden = Boolean(hidden);
+}
+
+function showLoadError(lang) {
+  _lastLoadFailed = true;
+  setHidden("appRoot", true);
+  setHidden("loadError", false);
+
+  const isAr = lang === "ar";
+  safeSetText("loadErrorTitle", isAr ? "تعذر تحميل القوانين" : "Couldn’t load rules");
+  safeSetText(
+    "loadErrorDesc",
+    isAr ? "تحقق من الاتصال وحاول مرة أخرى." : "Please check your connection and try again."
+  );
+  safeSetText("loadRetryBtn", isAr ? "إعادة المحاولة" : "Retry");
+}
+
+function hideLoadError() {
+  _lastLoadFailed = false;
+  setHidden("loadError", true);
+  setHidden("appRoot", false);
 }
 
 function slugify(s) {
@@ -44,6 +71,9 @@ function setOverlayOpen(open) {
   const overlay = $("tocOverlay");
   if (!overlay) return;
 
+  const tocToggle = $("tocToggle");
+  if (tocToggle) tocToggle.setAttribute("aria-expanded", String(Boolean(open)));
+
   overlay.dataset.open = String(open);
   overlay.setAttribute("aria-hidden", String(!open));
 
@@ -70,12 +100,14 @@ function getContent(lang) {
   return _contentByLang[lang];
 }
 
-async function loadContent(lang) {
+async function loadContent(lang, options) {
   if (_contentByLang[lang]) return _contentByLang[lang];
+
+  const cacheMode = options?.cache || "default";
 
   const url = `./content/rules.${lang}.json`;
   try {
-    const res = await fetch(url, { cache: "no-cache" });
+    const res = await fetch(url, { cache: cacheMode });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     _contentByLang[lang] = data;
@@ -399,53 +431,45 @@ function render(lang) {
   }
 }
 
-function renderCards(cards) {
-  const wrap = document.createElement("div");
-  wrap.className = "cards";
+function retryLoad(lang, opts) {
+  const effective = lang === "ar" ? "ar" : "en";
+  setHidden("loadRetryBtn", true);
 
-  for (const c of cards) {
-    const card = document.createElement("article");
-    card.className = "card";
-    card.dataset.open = "false";
-
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "card__btn";
-    btn.setAttribute("aria-expanded", "false");
-
-    const title = document.createElement("div");
-    title.className = "card__title";
-    title.textContent = c.title;
-
-    const meta = document.createElement("div");
-    meta.className = "card__meta";
-
-    const badge = document.createElement("span");
-    badge.className = `badge ${badgeClassFromPenalty(c.penalty)}`;
-    badge.textContent = c.penalty;
-
-    meta.appendChild(badge);
-
-    btn.appendChild(title);
-    btn.appendChild(meta);
-
-    const desc = document.createElement("div");
-    desc.className = "card__desc";
-    desc.textContent = c.desc || "";
-
-    btn.addEventListener("click", () => {
-      const next = card.dataset.open !== "true";
-      card.dataset.open = String(next);
-      btn.setAttribute("aria-expanded", String(next));
-    });
-
-    card.appendChild(btn);
-    if (c.desc) card.appendChild(desc);
-
-    wrap.appendChild(card);
+  if (opts?.fresh) {
+    delete _contentByLang[effective];
   }
 
-  return wrap;
+  loadContent(effective, { cache: opts?.fresh ? "reload" : "default" }).then((t) => {
+    setHidden("loadRetryBtn", false);
+    if (!t) {
+      showLoadError(effective);
+      return;
+    }
+    hideLoadError();
+    render(effective);
+  });
+}
+
+function getLangFromUrl() {
+  try {
+    const u = new URL(window.location.href);
+    const raw = (u.searchParams.get("lang") || "").toLowerCase();
+    if (raw === "ar") return "ar";
+    if (raw === "en") return "en";
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+function setLangQueryParam(lang) {
+  try {
+    const u = new URL(window.location.href);
+    u.searchParams.set("lang", lang);
+    history.replaceState(null, "", u.toString());
+  } catch {
+    // ignore
+  }
 }
 
 function renderWarning(w) {
@@ -574,10 +598,21 @@ function renderZones(zones) {
 
 function init() {
   const saved = localStorage.getItem(LS_LANG_KEY);
-  const lang = saved === "ar" ? "ar" : "en";
+  const urlLang = getLangFromUrl();
+  const lang = urlLang || (saved === "ar" ? "ar" : "en");
 
-  loadContent(lang).then((t) => {
-    if (!t) return;
+  localStorage.setItem(LS_LANG_KEY, lang);
+  setLangQueryParam(lang);
+
+  setHidden("loadError", true);
+  setHidden("appRoot", true);
+
+  loadContent(lang, { cache: "default" }).then((t) => {
+    if (!t) {
+      showLoadError(lang);
+      return;
+    }
+    hideLoadError();
     render(lang);
   });
 
@@ -612,21 +647,22 @@ function init() {
   if (langEn) {
     langEn.addEventListener("click", () => {
       localStorage.setItem(LS_LANG_KEY, "en");
-      loadContent("en").then((t) => {
-        if (!t) return;
-        render("en");
-      });
+      setLangQueryParam("en");
+      retryLoad("en");
     });
   }
 
   if (langAr) {
     langAr.addEventListener("click", () => {
       localStorage.setItem(LS_LANG_KEY, "ar");
-      loadContent("ar").then((t) => {
-        if (!t) return;
-        render("ar");
-      });
+      setLangQueryParam("ar");
+      retryLoad("ar");
     });
+  }
+
+  const retryBtn = $("loadRetryBtn");
+  if (retryBtn) {
+    retryBtn.addEventListener("click", () => retryLoad(_currentLang, { fresh: true }));
   }
 
   const backBtn = $("backBtn");

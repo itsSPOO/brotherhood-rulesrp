@@ -279,6 +279,33 @@ body.is-rules .container{
 
 .page{padding:22px 0 26px 0}
 
+.loadError{
+  margin: 0 0 14px 0;
+  border-radius: var(--radius-xl);
+  padding: 16px;
+  background: rgba(239,68,68,.10);
+  border: 1px solid rgba(239,68,68,.28);
+  color: #ffd4d4;
+}
+
+.loadError__title{font-weight:900;margin:0 0 6px 0}
+.loadError__desc{margin:0;color:rgba(255,212,212,.88);line-height:1.5}
+
+.loadError__btn{
+  margin-top: 12px;
+  border: none;
+  cursor: pointer;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  color: var(--text-white);
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  box-shadow: var(--shadow-primary);
+  font-weight: 800;
+  transition: var(--transition-base);
+}
+
+.loadError__btn:hover{transform: translateY(-2px); box-shadow: 0 12px 32px rgba(220, 38, 38, 0.4)}
+
 .rulesApp{
   border:2px solid rgba(220, 38, 38, 0.15);
   background:rgba(22, 33, 62, 0.55);
@@ -418,6 +445,12 @@ html[dir="rtl"] .rulesApp[data-view="detail"] .rulesApp__panes{transform: transl
 html[dir="rtl"] .catCard{text-align:right}
 html[dir="rtl"] .catCard__arrow{right:auto;left:16px}
 
+ .catCard__title,
+ .catCard__desc{
+   overflow-wrap:anywhere;
+   word-break:break-word;
+ }
+
 @media (min-width: 960px){
   .catCard{padding:18px}
   .catCard__title{font-size:22px}
@@ -432,6 +465,8 @@ html[dir="rtl"] .catCard__arrow{right:auto;left:16px}
   border-bottom:1px solid rgba(255,255,255,.08);
   margin-bottom:14px;
 }
+
+ .detailHead__text{min-width:0}
 
 .backBtn{
   border:none;
@@ -495,6 +530,10 @@ html[dir="rtl"] .detailNav{align-self:flex-start}
   font-weight:800;
   color: var(--text-white);
   line-height:1.35;
+  margin:0;
+  min-width:0;
+  overflow-wrap:anywhere;
+  word-break:break-word;
 }
 
 .ruleItem__desc{
@@ -503,9 +542,12 @@ html[dir="rtl"] .detailNav{align-self:flex-start}
   opacity:.95;
   line-height:1.75;
   white-space:pre-line;
+  overflow-wrap:anywhere;
+  word-break:break-word;
 }
 
 html[dir="rtl"] .ruleItem__head{flex-direction:row-reverse}
+ html[dir="rtl"] .ruleItem__title{ text-align:right }
 
 @media (max-width: 520px){
   .ruleItem__head{flex-direction:column;align-items:flex-start}
@@ -522,62 +564,6 @@ html[dir="rtl"] .ruleItem__head{flex-direction:row-reverse}
 .toc__item:hover{transform:translateY(-1px);background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.18)}
 .toc__label{font-weight:800;letter-spacing:.2px}
 .toc__chev{color:var(--text-gray)}
-
-.section{margin-top:26px;scroll-margin-top:88px}
-.section__head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
-.section__title{margin:0;font-size:24px;font-weight:1000;letter-spacing:.2px}
-.section__hint{margin:0;color:var(--text-gray);font-size:12px}
-
-.cards{
-  margin-top:12px;
-  display:grid;
-  grid-template-columns:1fr;
-  gap:12px;
-}
-@media (min-width: 1100px){
-  .cards{grid-template-columns:repeat(2, minmax(0,1fr))}
-}
-
-.card{
-  background: linear-gradient(135deg, rgba(26, 26, 46, 0.95) 0%, rgba(22, 33, 62, 0.95) 100%);
-  border-radius: var(--radius-xl);
-  padding:0;
-  border: 2px solid rgba(220, 38, 38, 0.2);
-  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(10px);
-  overflow:hidden;
-}
-
-.card:hover{
-  transform: translateY(-6px) scale(1.01);
-  box-shadow: 0 25px 60px rgba(220, 38, 38, 0.28);
-  border-color: rgba(220, 38, 38, 0.45);
-}
-.card__btn{
-  width:100%;
-  padding:16px 16px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  cursor:pointer;
-  border:0;
-  background:transparent;
-  color:inherit;
-  text-align:left;
-}
-.card__title{font-weight:1000;letter-spacing:.15px}
-.card__meta{display:flex;align-items:center;gap:10px;flex-shrink:0}
-.card__desc{
-  padding:0 16px 16px 16px;
-  margin-top:-4px;
-  color:var(--text-light);
-  line-height:1.7;
-  white-space:pre-line;
-  display:none;
-}
-.card[data-open="true"] .card__desc{display:block}
 
 .badge{
   display:inline-flex;
@@ -642,7 +628,14 @@ html[dir="rtl"] .ruleItem__head{flex-direction:row-reverse}
   border:1px solid rgba(255,255,255,.10);
   color:var(--text-light);
   white-space:pre-line;
+  overflow-wrap:anywhere;
+  word-break:break-word;
 }
+
+ .list__item > div:first-child{font-weight:900;line-height:1.35}
+ .list__item > div + div{margin-top:6px;color:var(--text-gray);line-height:1.65}
+
+ html[dir="rtl"] .list__item{ text-align:right }
 
 .safeZones{
   margin-top:12px;
@@ -791,6 +784,5 @@ html[dir="rtl"] .footer.footer--home .footer-section,
 body[lang="ar"] .footer.footer--home .footer-section{ text-align:right }
 
 /* RTL support */
-html[dir="rtl"] .card__btn{text-align:right}
 html[dir="rtl"] .table th, html[dir="rtl"] .table td{text-align:right}
 body[lang="ar"] .table th, body[lang="ar"] .table td{text-align:right}
