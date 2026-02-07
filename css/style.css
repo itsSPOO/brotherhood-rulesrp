@@ -330,7 +330,24 @@ body.is-rules .pane{
   }
 
   .rulesApp[data-view="detail"] .pane--list{overflow:auto}
+  .rulesApp[data-view="detail"] .pane--list{
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .rulesApp[data-view="detail"] .pane--list::-webkit-scrollbar{width:0;height:0}
   .rulesApp[data-view="detail"] .pane--detail{overflow:hidden}
+
+  .rulesApp[data-view="detail"] .pane--detail{
+    height:100%;
+    min-height:0;
+  }
+
+  .rulesApp[data-view="detail"] .detailBody{
+    flex:1 1 0;
+    min-height:0;
+    overflow-y:scroll;
+    scrollbar-gutter: stable;
+  }
 
   .rulesApp[data-view="detail"] .pane--list{
     flex:0 0 520px;
@@ -342,7 +359,7 @@ body.is-rules .pane{
     border-left:1px solid rgba(255,255,255,.08);
   }
 
-  .rulesApp[data-view="detail"] .pane--detail{display:block;flex:1}
+  .rulesApp[data-view="detail"] .pane--detail{display:flex;flex-direction:column;flex:1;min-height:0}
 
   .backBtn{display:none}
 }
@@ -430,10 +447,11 @@ html[dir="rtl"] .catCard__arrow{right:auto;left:16px}
 
 .detailTitle{font-size:26px;font-weight:800;color:var(--text-white)}
 .detailHint{margin-top:4px;color:var(--text-gray);font-size:13px}
-.pane--detail{position:relative;display:flex;flex-direction:column}
-.detailBody{padding-bottom:96px;flex:1 1 auto;overflow:auto}
 
-.detailNav{position:absolute;right:18px;bottom:18px;margin:0;padding:0;border:0}
+.pane--detail{position:relative;display:flex;flex-direction:column;min-height:0}
+.detailBody{padding-bottom:24px;flex:1 1 0;overflow-y:auto;min-height:0}
+
+.detailNav{position:static;margin:18px 0 0 0;padding:0;border:0;align-self:flex-end}
 
 .nextBtn{
   border:none;
@@ -449,7 +467,7 @@ html[dir="rtl"] .catCard__arrow{right:auto;left:16px}
 
 .nextBtn:hover{transform: translateY(-2px); box-shadow: 0 12px 32px rgba(220, 38, 38, 0.4)}
 
-html[dir="rtl"] .detailNav{right:auto;left:18px}
+html[dir="rtl"] .detailNav{align-self:flex-start}
 
 @media (min-width: 960px){
   .rulesApp[data-view="list"] .detailNav{display:none}
@@ -483,6 +501,7 @@ html[dir="rtl"] .detailNav{right:auto;left:18px}
   color: var(--text-light);
   opacity:.95;
   line-height:1.75;
+  white-space:pre-line;
 }
 
 html[dir="rtl"] .ruleItem__head{flex-direction:row-reverse}
@@ -554,6 +573,7 @@ html[dir="rtl"] .ruleItem__head{flex-direction:row-reverse}
   margin-top:-4px;
   color:var(--text-light);
   line-height:1.7;
+  white-space:pre-line;
   display:none;
 }
 .card[data-open="true"] .card__desc{display:block}
@@ -620,6 +640,7 @@ html[dir="rtl"] .ruleItem__head{flex-direction:row-reverse}
   background:rgba(255,255,255,.05);
   border:1px solid rgba(255,255,255,.10);
   color:var(--text-light);
+  white-space:pre-line;
 }
 
 .safeZones{

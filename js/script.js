@@ -2,6 +2,9 @@ const LS_LANG_KEY = "bh_rules_lang";
 
 let _currentLang = "en";
 let _currentCategoryKey = null;
+let _contentByLang = Object.create(null);
+let _overlayReturnFocusEl = null;
+let _overlayPanelEl = null;
 
 function $(id) {
   return document.getElementById(id);
@@ -46,8 +49,88 @@ function setOverlayOpen(open) {
 
   if (open) {
     document.body.style.overflow = "hidden";
+    _overlayReturnFocusEl = document.activeElement;
+    const panel = _overlayPanelEl || overlay.querySelector(".tocOverlay__panel");
+    _overlayPanelEl = panel;
+    queueMicrotask(() => {
+      const focusTarget = panel?.querySelector(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      (focusTarget || panel)?.focus?.();
+    });
   } else {
     document.body.style.overflow = "";
+    const toFocus = _overlayReturnFocusEl;
+    _overlayReturnFocusEl = null;
+    toFocus?.focus?.();
+  }
+}
+
+function getContent(lang) {
+  return _contentByLang[lang];
+}
+
+async function loadContent(lang) {
+  if (_contentByLang[lang]) return _contentByLang[lang];
+
+  const url = `./content/rules.${lang}.json`;
+  try {
+    const res = await fetch(url, { cache: "no-cache" });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    _contentByLang[lang] = data;
+    return data;
+  } catch (e) {
+    console.error("Failed to load rules JSON", { lang, url, error: e });
+    return null;
+  }
+}
+
+function getFocusableElements(root) {
+  if (!root) return [];
+  const nodes = root.querySelectorAll(
+    'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+  );
+  return Array.from(nodes).filter(
+    (el) => el.offsetParent !== null && !el.hasAttribute("disabled") && el.getAttribute("aria-hidden") !== "true"
+  );
+}
+
+function handleOverlayKeydown(e) {
+  const overlay = $("tocOverlay");
+  if (!overlay) return;
+  if (overlay.dataset.open !== "true") return;
+
+  if (e.key === "Escape") {
+    e.preventDefault();
+    setOverlayOpen(false);
+    return;
+  }
+
+  if (e.key !== "Tab") return;
+  const panel = _overlayPanelEl || overlay.querySelector(".tocOverlay__panel");
+  if (!panel) return;
+  const focusables = getFocusableElements(panel);
+  if (focusables.length === 0) {
+    e.preventDefault();
+    panel.focus?.();
+    return;
+  }
+
+  const first = focusables[0];
+  const last = focusables[focusables.length - 1];
+  const active = document.activeElement;
+
+  if (e.shiftKey) {
+    if (active === first || active === panel) {
+      e.preventDefault();
+      last.focus();
+    }
+  } else {
+    if (active === last) {
+      e.preventDefault();
+      first.focus();
+    }
   }
 }
 
@@ -102,311 +185,10 @@ function closeCategory() {
   }
 }
 
-const CONTENT = {
-  en: {
-    topSubtitle: "Official Rules",
-    title: "Brotherhood RP – Official Rules",
-    subtitle: "Respect the RP. Create the Story.",
-    desc: "By joining the server, you agree to follow all rules listed below.",
-    agreeText: "",
-    agreeBtn: "",
-    toastTitle: "",
-    toastDesc: "",
-    toc: [
-      { key: "core", label: "Core Roleplay Rules" },
-      { key: "combat", label: "Combat & Action Rules" },
-      { key: "robbery", label: "Robbery / Heist Rules" },
-      { key: "gang", label: "Gang Rules" },
-      { key: "safe", label: "Safe Zones" },
-      { key: "death", label: "Death RP" },
-      { key: "toxicity", label: "Toxicity / Respect" },
-      { key: "common", label: "Common Rules" }
-    ],
-    sections: {
-      core: {
-        title: "Core Roleplay Rules",
-        hint: "Click a card to expand.",
-        cards: [
-          {
-            title: "High RP / NVL",
-            penalty: "24H Ban",
-            desc: "Always value your life. Don’t do unrealistic actions that break immersion. Keep roleplay serious and consistent."
-          },
-          {
-            title: "Force RP / Meta",
-            penalty: "24H Ban",
-            desc: "No forcing outcomes without allowing roleplay. No using out-of-character info to affect in-character decisions."
-          },
-          {
-            title: "Free Kill / Car Kill",
-            penalty: "48H Ban",
-            desc: "No killing without a valid RP reason. No running people over to finish fights or avoid consequences."
-          }
-        ]
-      },
-      combat: {
-        title: "Combat & Action Rules",
-        hint: "Most bans happen here.",
-        cards: [
-          {
-            title: "Cop Bait / Interference",
-            penalty: "24H Ban",
-            desc: "Don’t intentionally provoke police without RP context. Don’t interfere in scenes without a valid RP reason."
-          },
-          {
-            title: "Combat Log / ALT+F4",
-            penalty: "48H Ban",
-            desc: "Disconnecting to avoid RP consequences is strictly prohibited. If you crash, report it immediately."
-          },
-          {
-            title: "Glitch / Cheat",
-            penalty: "PERMA",
-            desc: "Exploits, cheats, macro abuse, or bug advantages are zero tolerance."
-          }
-        ],
-        warning: {
-          title: "Warning",
-          desc: "This section is enforced strictly. Record clips whenever possible."
-        }
-      },
-      robbery: {
-        title: "Robbery / Heist Rules",
-        hint: "Follow schedules and limits.",
-        generalCard: {
-          title: "General Robbery Rules",
-          penalty: "48H Ban",
-          desc: "Follow staff instructions, respect hostage rules, and do not exploit mechanics."
-        },
-        table: {
-          headers: ["Heist", "Min", "Max", "Vehicles", "Hostages", "Days"],
-          rows: [
-            ["Store Robbery", "2", "3", "1", "0", "All Days"],
-            ["Fleeca Bank", "3", "4", "1", "1", "Tue–Fri"],
-            ["Jewelry Store", "3", "4", "1", "1", "Friday"],
-            ["Paleto Bank", "4", "5", "2", "2", "Saturday"],
-            ["Pacific Bank", "4", "5", "2", "2", "Sunday"]
-          ]
-        }
-      },
-      gang: {
-        title: "Gang Rules",
-        hint: "Territory, leadership, and coordination.",
-        list: [
-          "Respect territory & leadership",
-          "No attacking other gangs without RP reason",
-          "No exploits/glitches",
-          "Coordination mandatory",
-          "Cooldown 20 min"
-        ]
-      },
-      safe: {
-        title: "Safe Zones",
-        hint: "No provoking/criminal actions in these areas.",
-        zones: [
-          { name: "Hospital", note: "No criminal/provoking actions → 48H Ban", img: "./assets/hospital_sz.png" },
-          { name: "Hotel", note: "No criminal/provoking actions → 48H Ban", img: "./assets/hotel_sz.png" },
-          { name: "Fish", note: "No criminal/provoking actions → 48H Ban", img: "./assets/fish_sz.png" },
-          { name: "Recycle", note: "No criminal/provoking actions → 48H Ban", img: "./assets/Recycle_sz.jpg" },
-          { name: "Meth Lab", note: "No criminal/provoking actions → 48H Ban", img: "./assets/lab1_sz.jpg" },
-          { name: "Weed Lab", note: "No criminal/provoking actions → 48H Ban", img: "./assets/lab2_sz.jpg" }
-        ]
-      },
-      death: {
-        title: "Death RP",
-        hint: "Memory & scenario rules.",
-        list: [
-          "Don’t return to the same scenario",
-          "Forget players causing death, remember context only"
-        ]
-      },
-      toxicity: {
-        title: "Toxicity / Respect",
-        hint: "Keep it clean.",
-        cards: [
-          {
-            title: "Insults (Discord or RP)",
-            penalty: "24H Ban",
-            desc: "No insults, harassment, or toxic behavior in or out of RP."
-          },
-          {
-            title: "Parental insult / TRABRIB",
-            penalty: "PERMA",
-            desc: "Severe slurs and parental insults are zero tolerance."
-          },
-          {
-            title: "Disrespect (players / police / EMS)",
-            penalty: "24H Ban",
-            desc: "Keep respect toward players and factions."
-          }
-        ]
-      },
-      common: {
-        title: "Common Rules",
-        hint: "General enforcement notes.",
-        list: [
-          "Police / EMS clothes → only if assigned",
-          "Clip required if available",
-          "Ignorance of law is not excuse",
-          "WIPE PERSON = full character deletion"
-        ]
-      }
-    }
-  },
-  ar: {
-    topSubtitle: "قوانين السيرفر",
-    title: "Brotherhood RP – القوانين الرسمية",
-    subtitle: "احترم الرول بلاي. اصنع القصة.",
-    desc: "الدخول للسيرفر يعني موافقتك على جميع القوانين أدناه.",
-    agreeText: "",
-    agreeBtn: "",
-    toastTitle: "",
-    toastDesc: "",
-    toc: [
-      { key: "core", label: "قوانين الرول بلاي الأساسية" },
-      { key: "combat", label: "قوانين القتال والأكشن" },
-      { key: "robbery", label: "قوانين السرقة / الهست" },
-      { key: "gang", label: "قوانين العصابات" },
-      { key: "safe", label: "المناطق الآمنة" },
-      { key: "death", label: "قوانين الموت (Death RP)" },
-      { key: "toxicity", label: "السمّية / الاحترام" },
-      { key: "common", label: "قوانين عامة" }
-    ],
-    sections: {
-      core: {
-        title: "قوانين الرول بلاي الأساسية",
-        hint: "اضغط على الكارت لعرض التفاصيل.",
-        cards: [
-          {
-            title: "High RP / NVL",
-            penalty: "24H Ban",
-            desc: "قيّم حياتك دائماً. لا تقم بتصرفات غير واقعية تكسر الإندماج."
-          },
-          {
-            title: "Force RP / Meta",
-            penalty: "24H Ban",
-            desc: "ممنوع فرض نتيجة بدون إعطاء فرصة للرول بلاي. ممنوع الميتا جيمينغ."
-          },
-          {
-            title: "Free Kill / Car Kill",
-            penalty: "48H Ban",
-            desc: "ممنوع القتل بدون سبب رول بلاي واضح. ممنوع الدهس كحل سريع."
-          }
-        ]
-      },
-      combat: {
-        title: "قوانين القتال والأكشن",
-        hint: "أغلب الباندات تحصل هنا.",
-        cards: [
-          {
-            title: "Cop Bait / Interference",
-            penalty: "24H Ban",
-            desc: "ممنوع استفزاز الشرطة بدون سبب رول بلاي. ممنوع التدخل بدون سبب."
-          },
-          {
-            title: "Combat Log / ALT+F4",
-            penalty: "48H Ban",
-            desc: "الخروج لتفادي العواقب ممنوع. في حال كراش بلّغ فوراً."
-          },
-          {
-            title: "Glitch / Cheat",
-            penalty: "PERMA",
-            desc: "استخدام قلتش/هاك/استغلال أي ثغرة = صفر تسامح."
-          }
-        ],
-        warning: {
-          title: "تنبيه",
-          desc: "هذا القسم يُطبق بشكل صارم. صوّر كليب كلما أمكن."
-        }
-      },
-      robbery: {
-        title: "قوانين السرقة / الهست",
-        hint: "التزم بالجدول والعدد.",
-        generalCard: {
-          title: "قوانين عامة للسرقات",
-          penalty: "48H Ban",
-          desc: "التزم بتعليمات الإدارة وقوانين الرهائن ولا تستغل الميكانيك."
-        },
-        table: {
-          headers: ["الهست", "الحد الأدنى", "الحد الأقصى", "المركبات", "الرهائن", "الأيام"],
-          rows: [
-            ["Store Robbery", "2", "3", "1", "0", "كل الايام"],
-
-            ["Fleeca Bank", "3", "4", "1", "1", "الثلاثاء–الجمعة"],
-            ["Jewelry Store", "3", "4", "1", "1", "الجمعة"],
-            ["Paleto Bank", "4", "5", "2", "2", "السبت"],
-            ["Pacific Bank", "4", "5", "2", "2", "الأحد"]
-          ]
-        }
-      },
-      gang: {
-        title: "قوانين العصابات",
-        hint: "المنطقة، القيادة، والتنسيق.",
-        list: [
-          "احترام المنطقة والقيادة",
-          "ممنوع مهاجمة عصابة بدون سبب رول بلاي",
-          "ممنوع الاستغلال/الثغرات",
-          "التنسيق إلزامي",
-          "كولداون 20 دقيقة"
-        ]
-      },
-      safe: {
-        title: "المناطق الآمنة",
-        hint: "ممنوع أي تصرف إجرامي/استفزازي.",
-        zones: [
-          { name: "Hospital", note: "ممنوع أفعال إجرامية/استفزاز → 48H Ban", img: "./assets/hospital_sz.png" },
-          { name: "Hotel", note: "ممنوع أفعال إجرامية/استفزاز → 48H Ban", img: "./assets/hotel_sz.png" },
-          { name: "منطقة الصيد", note: "ممنوع أفعال إجرامية/استفزاز → 48H Ban", img: "./assets/fish_sz.png" },
-          { name: "Recycle", note: "ممنوع أفعال إجرامية/استفزاز → 48H Ban", img: "./assets/Recycle_sz.jpg" },
-          { name: "مختبر الميث", note: "ممنوع أفعال إجرامية/استفزاز → 48H Ban", img: "./assets/lab1_sz.jpg" },
-          { name: "مختبر الحشيش", note: "ممنوع أفعال إجرامية/استفزاز → 48H Ban", img: "./assets/lab2_sz.jpg" }
-        ]
-      },
-      death: {
-        title: "قوانين الموت (Death RP)",
-        hint: "الذاكرة والرجوع للمشهد.",
-        list: [
-          "ممنوع الرجوع لنفس السيناريو",
-          "تنسى الأشخاص المسببين للموت وتذكر السياق فقط"
-        ]
-      },
-      toxicity: {
-        title: "السمّية / الاحترام",
-        hint: "احترام الجميع.",
-        cards: [
-          {
-            title: "السب/الإهانة (ديسكورد أو RP)",
-            penalty: "24H Ban",
-            desc: "ممنوع الإهانة أو التحرش أو السلوك السام."
-          },
-          {
-            title: "سبّ الوالدين / TRABRIB",
-            penalty: "PERMA",
-            desc: "الكلام العنصري/سب الوالدين = صفر تسامح."
-          },
-          {
-            title: "عدم احترام (لاعبين/شرطة/إسعاف)",
-            penalty: "24H Ban",
-            desc: "حافظ على الاحترام داخل وخارج الرول بلاي."
-          }
-        ]
-      },
-      common: {
-        title: "قوانين عامة",
-        hint: "ملاحظات تطبيق القوانين.",
-        list: [
-          "لبس الشرطة/الإسعاف فقط عند التعيين",
-          "الكليب مطلوب إذا متوفر",
-          "الجهل بالقانون ليس عذراً",
-          "WIPE PERSON = حذف كامل للشخصية"
-        ]
-      }
-    }
-  }
-};
-
 function renderShell(lang) {
   _currentLang = lang;
-  const t = CONTENT[lang];
+  const t = getContent(lang);
+  if (!t) return;
   const isAr = lang === "ar";
 
   document.documentElement.lang = lang;
@@ -479,7 +261,7 @@ function renderShell(lang) {
 }
 
 function getNextCategoryKey(lang, currentKey) {
-  const t = CONTENT[lang];
+  const t = getContent(lang);
   const keys = t.toc.map((x) => x.key);
   const idx = keys.indexOf(currentKey);
   if (idx === -1) return keys[0] || null;
@@ -487,7 +269,7 @@ function getNextCategoryKey(lang, currentKey) {
 }
 
 function renderCategories(lang) {
-  const t = CONTENT[lang];
+  const t = getContent(lang);
   const grid = $("categoriesGrid");
   if (!grid) return;
   grid.innerHTML = "";
@@ -521,7 +303,7 @@ function renderCategories(lang) {
 }
 
 function renderDetail(lang) {
-  const t = CONTENT[lang];
+  const t = getContent(lang);
   const key = _currentCategoryKey;
   const body = $("detailBody");
   if (!body) return;
@@ -719,7 +501,34 @@ function renderList(items) {
   for (const it of items) {
     const li = document.createElement("li");
     li.className = "list__item";
-    li.textContent = it;
+
+    const raw = String(it ?? "");
+    if (raw.includes("\n")) {
+      const [first, ...rest] = raw.split("\n");
+      const title = document.createElement("div");
+      title.textContent = first.trim();
+
+      const desc = document.createElement("div");
+      const descText = rest.join("\n").trim();
+      if (descText) {
+        desc.style.whiteSpace = "pre-line";
+        if (_currentCategoryKey === "common") {
+          desc.textContent = descText
+            .split("\n")
+            .map((line) => `> ${line}`)
+            .join("\n");
+        } else {
+          desc.textContent = descText;
+        }
+      } else {
+        desc.textContent = "";
+      }
+
+      li.appendChild(title);
+      if (desc.textContent) li.appendChild(desc);
+    } else {
+      li.textContent = raw;
+    }
     ul.appendChild(li);
   }
 
@@ -762,13 +571,18 @@ function renderZones(zones) {
 function init() {
   const saved = localStorage.getItem(LS_LANG_KEY);
   const lang = saved === "ar" ? "ar" : "en";
-  render(lang);
+
+  loadContent(lang).then((t) => {
+    if (!t) return;
+    render(lang);
+  });
 
   setOverlayOpen(false);
 
   const tocToggle = $("tocToggle");
   const tocClose = $("tocClose");
   const overlay = $("tocOverlay");
+  _overlayPanelEl = overlay ? overlay.querySelector(".tocOverlay__panel") : null;
 
   if (tocToggle) {
     tocToggle.addEventListener("click", () => {
@@ -787,23 +601,27 @@ function init() {
     });
   }
 
-  window.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") setOverlayOpen(false);
-  });
+  document.addEventListener("keydown", handleOverlayKeydown);
 
   const langEn = $("langEn");
   const langAr = $("langAr");
   if (langEn) {
     langEn.addEventListener("click", () => {
       localStorage.setItem(LS_LANG_KEY, "en");
-      render("en");
+      loadContent("en").then((t) => {
+        if (!t) return;
+        render("en");
+      });
     });
   }
 
   if (langAr) {
     langAr.addEventListener("click", () => {
       localStorage.setItem(LS_LANG_KEY, "ar");
-      render("ar");
+      loadContent("ar").then((t) => {
+        if (!t) return;
+        render("ar");
+      });
     });
   }
 
@@ -836,7 +654,9 @@ function init() {
     }
 
     const key = String(raw).toLowerCase();
-    const valid = Object.keys(CONTENT[_currentLang].sections).find((k) => slugify(k) === key);
+    const t = getContent(_currentLang);
+    if (!t) return;
+    const valid = Object.keys(t.sections).find((k) => slugify(k) === key);
     if (valid) {
       _currentCategoryKey = valid;
       setView("detail");
@@ -847,7 +667,9 @@ function init() {
   const initialHash = window.location.hash.replace(/^#/, "");
   if (initialHash && $("appRoot")) {
     const key = String(initialHash).toLowerCase();
-    const valid = Object.keys(CONTENT[_currentLang].sections).find((k) => slugify(k) === key);
+    const t = getContent(_currentLang);
+    if (!t) return;
+    const valid = Object.keys(t.sections).find((k) => slugify(k) === key);
     if (valid) {
       openCategory(valid, false);
     }

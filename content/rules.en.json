@@ -1,0 +1,150 @@
+{
+  "topSubtitle": "Official Rules",
+  "title": "Brotherhood RP – Official Rules",
+  "subtitle": "Respect the RP. Create the Story.",
+  "desc": "By joining the server, you agree to follow all rules listed below.",
+  "toc": [
+    { "key": "core", "label": "Core Roleplay Rules" },
+    { "key": "combat", "label": "Combat & Action Rules" },
+    { "key": "robbery", "label": "Robbery / Heist Rules" },
+    { "key": "gang", "label": "Gang Rules" },
+    { "key": "safe", "label": "Safe Zones" },
+    { "key": "death", "label": "Death RP" },
+    { "key": "toxicity", "label": "Toxicity / Respect" },
+    { "key": "common", "label": "Common Rules" }
+  ],
+  "sections": {
+    "core": {
+      "title": "Core Roleplay Rules",
+      "hint": "Click a card to expand.",
+      "cards": [
+        {
+          "title": "High RP / NVL",
+          "penalty": "24H Ban",
+          "desc": "Always value your life and act realistically even in the worst situations.\n\n❌ You run away from a gun pointed at you and act like you’re not scared.\n✅ You negotiate / back off carefully and give fear and pain real weight inside the scene."
+        },
+        {
+          "title": "Force RP / Meta",
+          "penalty": "24H Ban",
+          "desc": "You can’t force an outcome on another player, and you can’t use out-of-RP information inside RP.\n\n✅ You threaten the player and let them decide how they respond.\n❌ You tell a player: “Give me the money now, you’re not allowed to refuse!”\n\n❌ You target someone because you learned their location from Discord.\n✅ You gather information inside the city only (seeing / talking / RP radio)."
+        },
+        {
+          "title": "Free Kill / Car Kill",
+          "penalty": "48H Ban",
+          "desc": "Any killing must have a clear RP reason built on a real scenario — not for fun or quick profit.\n\n✅ You enter a meaningful conflict: previous threats / long dispute / clear scenario.\n❌ You kill someone in the street for no reason like “I just want to test the gun”.\n\n❌ You run someone over to end the fight or escape consequences.\n✅ You use your car to escape realistically, without intentional ramming unless the RP is strong and justified."
+        }
+      ]
+    },
+    "combat": {
+      "title": "Combat & Action Rules",
+      "hint": "Most bans happen here.",
+      "cards": [
+        {
+          "title": "Cop Bait / Interference",
+          "penalty": "24H Ban",
+          "desc": "Don’t provoke police without RP reason, and don’t jump into a scenario you have no connection to.\n\n❌ You drive around the station and shoot just to “make them come”.\n✅ You create a logical RP reason (report / spotted / pursuit due to an actual crime).\n\n❌ You interfere in an arrest just to “help your friends”.\n✅ If you’re part of the story you join with a clear motive; otherwise you let the scene play out."
+        },
+        {
+          "title": "Combat Log / ALT+F4",
+          "penalty": "48H/7D",
+          "desc": "Leaving during an active scenario to avoid consequences is forbidden. You have 5 minutes to return, and you must inform staff if it was a technical issue.\n\n❌ You disconnect when police catch you or when you’re losing a fight.\n✅ If you crash / lose connection: you return quickly and explain to staff what happened."
+        },
+        {
+          "title": "Glitch / Cheat",
+          "penalty": "PERMA",
+          "desc": "Abusing glitches or using any cheat / macro = permanent ban, no discussion.\n\n❌ You exploit a wall / door / mechanic so you can’t be caught.\n✅ You report it to staff and stop abusing it immediately."
+        }
+      ],
+      "warning": {
+        "title": "Warning",
+        "desc": "This section is enforced strictly. Record clips whenever possible."
+      }
+    },
+    "robbery": {
+      "title": "Robbery / Heist Rules",
+      "hint": "Follow schedules and limits.",
+      "generalCard": {
+        "title": "General Robbery Rules",
+        "penalty": "48H Ban",
+        "desc": "General Rules:\n- Follow the schedule and the required number of participants for each heist.\n- Follow staff instructions and respect hostage rules.\n- Do not exploit mechanics or game bugs for unfair advantages.\n- Any violation may result in a 48-hour ban."
+      },
+      "table": {
+        "headers": ["Heist", "Min", "Max", "Vehicles", "Hostages", "Days"],
+        "rows": [
+          ["Store Robbery", "2", "3", "1", "0", "All Days"],
+          ["Fleeca Bank", "3", "4", "1", "1", "Tue–Fri"],
+          ["Jewelry Store", "3", "4", "1", "1", "Friday"],
+          ["Paleto Bank", "4", "5", "2", "2", "Saturday"],
+          ["Pacific Bank", "4", "5", "2", "2", "Sunday"]
+        ]
+      }
+    },
+    "gang": {
+      "title": "Gang Rules",
+      "hint": "Territory, leadership, and coordination.",
+      "list": [
+        "Respect territory & leadership\n❌ You start a war without going through the leader / coordination.\n✅ You coordinate with leadership and respect territory boundaries.",
+        "No attacking other gangs without an RP reason\n❌ You hit a gang just because you want action.\n✅ You have a story: revenge / debt / betrayal / a clear ongoing conflict.",
+        "Coordination is mandatory\n❌ You drag your group into a big fight without informing them / without a plan.\n✅ You define roles, a fallback point, and communicate in RP.",
+        "Cooldown — 20 minutes\n❌ You return to fighting immediately after a major encounter.\n✅ You wait 20 minutes of calm before escalating again."
+      ]
+    },
+    "safe": {
+      "title": "Safe Zones",
+      "hint": "No provoking/criminal actions in these areas.",
+      "zones": [
+        { "name": "🏥 Hospital", "note": "No criminal/provoking actions → 48H Ban", "img": "./assets/hospital_sz.png" },
+        { "name": "🏨 Hotel", "note": "No criminal/provoking actions → 48H Ban", "img": "./assets/hotel_sz.png" },
+        { "name": "🎯 Fish", "note": "No criminal/provoking actions → 48H Ban", "img": "./assets/fish_sz.png" },
+        { "name": "♻️ Recycle", "note": "No criminal/provoking actions → 48H Ban", "img": "./assets/Recycle_sz.jpg" },
+        { "name": "⚗️ Meth Lab", "note": "No criminal/provoking actions → 48H Ban", "img": "./assets/lab1_sz.jpg" },
+        { "name": "🌿 Weed Lab", "note": "No criminal/provoking actions → 48H Ban", "img": "./assets/lab2_sz.jpg" }
+      ]
+    },
+    "death": {
+      "title": "Death RP",
+      "hint": "Memory & scenario rules.",
+      "list": [
+        "Do not return to the same scenario immediately\n❌ You wake up and go back to the same place to take revenge.\n✅ You continue your day away from the same event and respect the return timing/conditions.",
+        "Memory: forget the people who caused your death and remember context only\n❌ You say “X is the one who killed me” and target them again.\n✅ You only remember that you were attacked/ambushed without identifying the attackers."
+      ]
+    },
+    "toxicity": {
+      "title": "Toxicity / Respect",
+      "hint": "Keep it clean.",
+      "cards": [
+        {
+          "title": "Insults (Discord or RP)",
+          "penalty": "24H Ban",
+          "desc": "No heavy insults, harassment, or any speech that turns into a personal attack outside RP.\n\n❌ You insult/put down a player because you lost to them.\n✅ You keep RP calm and if there is an issue, make a report."
+        },
+        {
+          "title": "Parental Insults / TRABRIB / Racism",
+          "penalty": "PERMA",
+          "desc": "Parental insults, TRABRIB, or any racist speech = zero tolerance.\n\n❌ Parental insults or racist slurs in voice/chat.\n✅ You stay within respect and keep disagreements inside RP in a respectful way."
+        },
+        {
+          "title": "Disrespect (players / police / EMS)",
+          "penalty": "24H Ban",
+          "desc": "Keep a respectful attitude with everyone, especially factions (Police/EMS).\n\n❌ You mock EMS or sabotage their work.\n✅ You cooperate, respond, and let them complete their scenario."
+        }
+      ]
+    },
+    "common": {
+      "title": "Common Rules",
+      "hint": "General enforcement notes.",
+      "list": [
+        "Police / EMS uniform\nOnly allowed for assigned members or players with official permission.\nAnyone wearing it without rights may receive a warning or punishment.",
+        "Clips (Clip)\nRequired if you have it available during important events or fights.\nIt helps prove what happened and resolve disputes.",
+        "Ignorance of the rules\nNot knowing the rules is not an excuse for violations.\nAll players are responsible for their actions on the server.",
+        "WIPE PERSON\nMeans a full character deletion and starting a new character.\nUsed only in special cases or by staff request.",
+        "Respect other players\nNo swearing, insults, or any racist language.\nAny aggressive behavior without reason will result in punishment.",
+        "Force RP & logical RP\nAll actions in RP must be logical and fit the story.\nNo killing or threatening players without a clear reason or agreed scenario.",
+        "Safe Zones\nRecycle – Fishing Area – Hotel – Hospital – Weed Lab\nNo criminal or provoking actions inside these areas.\nViolations may lead to punishment or a ban.",
+        "Handling disputes\nAlways try to resolve conflicts through roleplay.\nUsing force must be justified and logical within the events.",
+        "Character control\nDo not use glitches or exploit game errors.\nAny Combat Log attempt or illegal disengage from fights is forbidden.",
+        "Contacting staff\nIf you have a problem or complaint, contact staff politely and clearly.\nSpreading fake news or rumors is forbidden."
+      ]
+    }
+  }
+}
